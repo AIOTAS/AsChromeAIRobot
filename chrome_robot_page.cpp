@@ -1,32 +1,22 @@
 #include "chrome_robot_page.h"
+#include "chrome_run_utils.hpp"
 
 bool AsChromePageRobot::connect_browser()
 {
-    std::vector<std::string> *run_browser_args = new std::vector<std::string>();
-    run_browser_args->push_back("--remote-debugging-port=" + this->remote_debugging_port);
-    run_browser_args->push_back("--disable-suggestions-ui");
-    run_browser_args->push_back("--hide-crash-restore-bubble");
-    run_browser_args->push_back("--disable-infobars");
-    run_browser_args->push_back("--no-first-run");
-    run_browser_args->push_back("--disable-features=PrivacySandboxSettings4");
-    run_browser_args->push_back("--user-data-dir=C:\\Users\\10501\\AppData\\Local\\Temp\\AsChromePageRobot\\userData\\9333");
-
-    // 拼接参数
     std::string chrome_exec_path = this->get_chrome_path_from_env();
     std::cout << chrome_exec_path << std::endl;
 
-    std::string cmd = "\"" + chrome_exec_path + "\"";
-    for (std::vector<std::string>::iterator begin = run_browser_args->begin(); begin != run_browser_args->end(); begin++)
-    {
-        cmd += (std::string(begin->c_str()) + " ");
-    }
+    std::vector<std::string> run_browser_args;
+    run_browser_args.push_back("\"" + chrome_exec_path + "\"");
+    run_browser_args.push_back("--remote-debugging-port=" + this->remote_debugging_port);
+    run_browser_args.push_back("--disable-suggestions-ui");
+    run_browser_args.push_back("--hide-crash-restore-bubble");
+    run_browser_args.push_back("--disable-infobars");
+    run_browser_args.push_back("--no-first-run");
+    run_browser_args.push_back("--disable-features=PrivacySandboxSettings4");
+    run_browser_args.push_back("--user-data-dir=C:\\Users\\10501\\AppData\\Local\\Temp\\AsChromePageRobot\\userData\\9333");
 
-    std::cout << cmd << std::endl;
-
-    int result = system(cmd.c_str());
-
-    std::cout << result << std::endl;
-
+    run_cmd_using_system_with_thread(run_browser_args);
     return true;
 }
 
